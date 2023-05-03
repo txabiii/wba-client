@@ -1,0 +1,86 @@
+.home {
+  width: 100vw;
+
+  display: flex;
+
+  main {
+    flex-basis: calc(100vw * var(--gr-little));
+    background-color: var(--color-1);
+
+    .feature {
+      padding: var(--spacing-xl);
+      height: 100svh;
+
+      display: flex;
+      flex-direction: column;
+
+      color: white;
+
+      .top {
+        flex-basis: calc(100% * var(--gr-big));
+
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+
+      .bottom {
+        flex-grow: 1;
+      }
+    }
+
+    .header {
+      color: var(--color-4);
+
+      h4 {
+        font-weight: 600;
+        display: inline;
+      }
+
+      h6 {
+        font-weight: 600;
+        font-size: 1.5rem;
+        margin-top: -0.5rem;
+      }
+
+      .brand {
+        display: inline-block;
+      }
+
+      .beta {
+        display: inline-block;
+        vertical-align: top;
+        margin-top: 0.6rem;
+        margin-left: 0.5rem;
+
+        background-color: var(--color-4);
+        padding: var(--spacing-xxs);
+        border-radius: var(--spacing-xxs);
+        color: var(--color-1);
+
+        font-weight: 600;
+        font-family: 'Rokkitt', serif;
+      }
+    }
+
+    .content {
+      h1 {
+        line-height: 5rem;
+      }
+
+      h3 {
+        color: var(--color-4);
+        font-weight: 600;
+      }
+
+      p {
+        margin-top: 3rem;
+        line-height: 2.5rem;
+      }
+    }
+  }
+
+  aside {
+    flex: 1;
+  }
+}
