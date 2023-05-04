@@ -6,10 +6,19 @@ import Button from '@root/components/Button/component'
 
 import Link from 'next/link'
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
+
+import getDemoObject from '@root/api/demoClient';
+
+interface DemoObject {
+  name: string,
+  properties: { [key: string]: string },
+  type: string,
+  description: string
+}
 
 export default function Home() {
-  // snap effect
+  // Snap effect
   const heroRef = useRef<HTMLDivElement>(null);
   const templateFreeRef = useRef<HTMLDivElement>(null);
   const aiAssistanceRef = useRef<HTMLDivElement>(null);
@@ -53,6 +62,22 @@ export default function Home() {
         func(...args)
       }, delay)
     }
+  }
+
+  // get demo object
+  const [demoObject, setDemoObject] = useState<DemoObject>()
+
+  const handleGenerateObject = () => {
+    async function fetchData() {
+      const data = await getDemoObject();
+      if(data.status === 'success') {
+        setDemoObject(data.content)
+        console.log(data.content)
+      } else {
+        console.log(data.content)
+      }
+    }
+    fetchData();
   }
 
   return(
@@ -164,23 +189,24 @@ export default function Home() {
             <div className={styles.content}>
               <div className={styles.details}>
                 <h5>Object details</h5>
-                <input type="text" placeholder='Write the name of your object' />
-                <input className={styles.uniqueInput} type="text" placeholder='My object is a...' />
+                <input type="text" value={demoObject?.name} placeholder='Write the name of your object' />
+                <input className={styles.uniqueInput} value={'a type of ' + demoObject?.type} type="text" placeholder='My object is a...' />
               </div>
               <h5>Properties</h5>
               <div className={styles.propertyGroup}>
-                <div className={styles.property}>
-                  <input type="text" name="property-name" placeholder='Property 1'/>
-                  <input type="text" name="property-value" placeholder='Describe the property'/>
-                </div>
-                <div className={styles.property}>
-                  <input type="text" name="property-name" placeholder='Property 2'/>
-                  <input type="text" name="property-value" placeholder='Describe the property'/>
-                </div>
+                {
+                  demoObject?.properties && Object.entries(demoObject?.properties).map(([key, value], index)=>(
+                    <div key={index} className={styles.property}>
+                      <input type="text" name="property-name" value={key}  placeholder='Property 1'/>
+                      <input type="text" name="property-value" value={value} placeholder='Describe the property'/>
+                    </div>
+                  ))
+                }
               </div>
               <div>
                 <h5>Description</h5>
                 <textarea 
+                  value={demoObject?.description}
                   name="description" 
                   cols={30} rows={3} 
                   placeholder='Write the description for your world-building-object...'>
@@ -188,7 +214,7 @@ export default function Home() {
               </div>
             </div>
           </div>
-          <Button content='Generate an object' />
+          <Button content='Generate an object' click={handleGenerateObject} />
         </div>
       </aside>
     </div>

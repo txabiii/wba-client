@@ -3,11 +3,11 @@ import { MouseEventHandler } from 'react'
 
 interface ButtonProps {
   content: string
-  // click?: MouseEventHandler<HTMLButtonElement>
+  click?: MouseEventHandler<HTMLButtonElement>
 }
 
-export default function Button({ content }: ButtonProps){
+export default function Button({ content, click = ()=>{} }: ButtonProps){
   return(
-    <button className={styles.button}>{ content }</button>
+    <button className={styles.button} onClick={click}>{ content }</button>
   )
 }
