@@ -1,0 +1,22 @@
+.button {
+  width: 100%;
+  padding: 1.5rem;
+  border-radius: 1rem;
+  border: none;
+  
+  font-size: 3rem;
+  font-family: 'Rokkitt', serif;
+  font-weight: 400;
+  text-align: center;
+  
+  color: white;  
+  background-color: var(--color-3);
+
+  cursor: pointer;
+} 
+
+@media only screen and (max-width: 1200px) { // for tablet
+  .button {
+    font-size: 2.5rem;
+  }
+}

@@ -2,6 +2,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400;700&display=swap');
 
 :root {
+  // for dark theme
   --foreground-rgb: 0, 0, 0;
   --background-rgb: 255, 255, 255;
 
@@ -11,6 +12,14 @@
   --color-3: #307ACE;
   --color-4: #A1C5F6;
   --color-5: #FFFCF7; 
+
+  // Green theme
+
+  // --color-1: #2C282E;
+  // --color-2: #2d6b50;
+  // --color-3: #30ce3d;
+  // --color-4: #abf6a1;
+  // --color-5: #FFFCF7; 
 
   // spacings
   --spacing-xxs: 0.5rem;
@@ -26,13 +35,22 @@
   --gr-big: 0.618034
 }
 
+// Dark-theme off for now
+
+/**
 @media (prefers-color-scheme: dark) {
   :root {
     --foreground-rgb: 255, 255, 255;
     --background-rgb: 0, 0, 0;
-    --background-rgb: 0, 0, 0;
   }
 }
+
+@media (prefers-color-scheme: dark) {
+  html {
+    color-scheme: dark;
+  }
+}
+*/
 
 * {
   box-sizing: border-box;
@@ -43,7 +61,6 @@
 html,
 body {
   max-width: 100vw;
-  overflow-x: hidden;
   font-size: 12px;
 }
 
@@ -52,25 +69,25 @@ body {
   background-color: rgb(var(--background-rgb))
 }
 
-@media only screen and (max-width: 1600px) {
+@media only screen and (max-width: 1600px) { // for desktop that isn't standard 1920x1080
   html {
-    font-size: 10px;
+    font-size: 9px;
   }
 }
 
-@media only screen and (max-width: 1300px) {
+@media only screen and (max-width: 1200px) { // for tablet
   html {
-    font-size: 8px;
+    font-size: 7px;
   }
 }
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 600px) { // for larger smarthpones
   html {
     font-size: 6px;
   }
 }
 
-@media only screen and (max-width: 400px) {
+@media only screen and (max-width: 360px) { // for standard smartphones
   html {
     font-size: 4px;
   }
@@ -95,10 +112,4 @@ p {
 a {
   color: inherit;
   text-decoration: none;
-}
-
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
 }
