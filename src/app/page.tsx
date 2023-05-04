@@ -1,15 +1,65 @@
+'use client';
+
 import styles from './page.module.scss'
 import LoginInput from '@root/components/LoginInput/component'
 import Button from '@root/components/Button/component'
 
 import Link from 'next/link'
 
+import { useEffect, useRef } from 'react';
+
 export default function Home() {
+  // snap effect
+  const heroRef = useRef<HTMLDivElement>(null);
+  const templateFreeRef = useRef<HTMLDivElement>(null);
+  const aiAssistanceRef = useRef<HTMLDivElement>(null);
+  const aiControlRef = useRef<HTMLDivElement>(null);
+
+
+  useEffect(()=>{
+    const debouncedSnapToClosest = debounce(snapToClosest, 200)
+
+    window.addEventListener('scroll', debouncedSnapToClosest);
+
+    return () => {
+      window.removeEventListener('scroll', debouncedSnapToClosest)
+    }
+  }, [])
+
+  function snapToClosest() {
+    if(heroRef.current && templateFreeRef.current && aiAssistanceRef.current && aiControlRef.current) {
+      const elements = [heroRef.current, templateFreeRef.current, aiAssistanceRef.current, aiControlRef.current]
+      let closestIndex = 0;
+
+      for(let i = 1; i < elements.length; i++) {
+        if(Math.abs(elements[i].getBoundingClientRect().top) < Math.abs(elements[closestIndex].getBoundingClientRect().top) ) {
+          closestIndex = i
+        }
+      }
+      
+      const closestElement = elements[closestIndex];
+
+      closestElement.scrollIntoView({ behavior: 'smooth'})
+    }
+  }
+
+  function debounce(func: (...args: any[]) => void, delay: number): (...args: any[]) => void {
+    let timeoutId: NodeJS.Timeout;
+    return function (...args: any[]) {
+      if(timeoutId) {
+        clearTimeout(timeoutId);
+      }
+      timeoutId = setTimeout(()=>{
+        func(...args)
+      }, delay)
+    }
+  }
+
   return(
     <div className={styles.home}>
       <main>
         {/* HERO SECTION */}
-        <section className={styles.feature}>
+        <section className={styles.feature} ref={heroRef}>
           <div className={styles.top}>
             <div className={styles.header}>
               <div className={styles.brand}>
@@ -34,7 +84,7 @@ export default function Home() {
           </div>
         </section>
         {/* FEATURE #1 */}
-        <section className={styles.feature}>
+        <section className={styles.feature} ref={templateFreeRef}>
           <div className={styles.top}>
             <div className={styles.header}>
               <div className={styles.brand}>
@@ -58,7 +108,7 @@ export default function Home() {
           </div>
         </section>
         {/* FEATURE #2 */}
-        <section className={styles.feature}>
+        <section className={styles.feature} ref={aiAssistanceRef}>
         <div className={styles.top}>
             <div className={styles.header}>
               <div className={styles.brand}>
@@ -82,7 +132,7 @@ export default function Home() {
           </div>
         </section>
         {/* FEATURE #3 */}
-        <section className={styles.feature}>
+        <section className={styles.feature} ref={aiControlRef}>
         <div className={styles.top}>
             <div className={styles.header}>
               <div className={styles.brand}>
@@ -107,9 +157,37 @@ export default function Home() {
         </section>
       </main>
       <aside>
-        <div className={styles.technicalDemo}>
+        <div className={styles.object}>
           <h2>See for yourself</h2>
-          <div>form goes here</div>
+          <div className={styles.form}>
+            <div className={styles.color}></div>
+            <div className={styles.content}>
+              <div className={styles.details}>
+                <h5>Object details</h5>
+                <input type="text" placeholder='Write the name of your object' />
+                <input className={styles.uniqueInput} type="text" placeholder='My object is a...' />
+              </div>
+              <h5>Properties</h5>
+              <div className={styles.propertyGroup}>
+                <div className={styles.property}>
+                  <input type="text" name="property-name" placeholder='Property 1'/>
+                  <input type="text" name="property-value" placeholder='Describe the property'/>
+                </div>
+                <div className={styles.property}>
+                  <input type="text" name="property-name" placeholder='Property 2'/>
+                  <input type="text" name="property-value" placeholder='Describe the property'/>
+                </div>
+              </div>
+              <div>
+                <h5>Description</h5>
+                <textarea 
+                  name="description" 
+                  cols={30} rows={3} 
+                  placeholder='Write the description for your world-building-object...'>
+                </textarea>
+              </div>
+            </div>
+          </div>
           <Button content='Generate an object' />
         </div>
       </aside>
