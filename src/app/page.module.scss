@@ -56,6 +56,28 @@
           display: flex;
           flex-direction: column;
           gap: 1.5rem;
+
+          input {
+            width: 100%;
+            padding: 1.5rem;
+            border-radius: 1rem;
+            
+            font-size: 3rem;
+            font-family: 'Rokkitt', serif;
+            font-weight: 400;
+            text-align: left;
+            color: white;
+            background-color: transparent;
+            border: 2px solid white;
+          }
+          
+          input:focus {
+            outline: transparent;
+          }
+
+          .forget {
+            color: var(--color-4);
+          }
     
           p {
             text-align: center;
@@ -84,10 +106,11 @@
           .empty {
             flex: 1;
           }
-
-          .question {
-            margin-top: 1.5rem;
-          }
+        }
+        
+        .question {
+          cursor: pointer;
+          margin-top: 1.5rem;
         }
       }
     }
@@ -140,92 +163,16 @@
     display: flex;
     justify-content: center;
 
-    .object {      
-      position: sticky;
-      top: 0;
-
-      width: calc(100% * var(--gr-big));
-      height: 100svh;
-      padding: var(--spacing-xl) 0px;
-
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: space-between;
-
-      .form {
-        border: 2px solid var(--color-3);
-        width: 100%;
-        border-radius: var(--spacing-xs);
-        overflow: hidden;
-        background-color: white;
-
-        .color {
-          height: 7.25rem;
-          background-color: var(--color-3);
-        }
-
-        .content {
-          padding: var(--spacing-lg);
-        }
-
-        .uniqueInput {
-          background-color: white;
-          border: none;
-          padding: 0;
-        }
-
-        input, textarea {
-          width: 100%;
-          padding: 1rem;
-          border-radius: 1rem;
-          border: 2px solid var(--color-3);
-          background-color: var(--color-5);
-          
-          font-size: 2.5rem;
-          font-family: 'Rokkitt', serif;
-          font-weight: 400;
-        }
-
-        input {
-          text-align: center;
-        }
-
-        textarea {
-          resize: none;
-          text-align: left;
-        }
-
-        input:focus, textarea:focus {
-          outline: transparent;
-        }
-
-        .propertyGroup {
-          display: flex;
-          flex-direction: column;
-          gap: 0.6rem;
-
-          .property {
-            display: flex;
-            border: 2px solid var(--color-3);
-            border-radius: var(--spacing-xs);
-            overflow: hidden;
-  
-            input {
-              border: none;
-              border-radius: 0px;
-              text-align: left;
-            }
-  
-            input:first-of-type {
-              width: calc(100% * var(--gr-little));
-              border-right: 2px solid var(--color-3);
-              background-color: white;
-            }
-          }
-        }
-      }
-    }
+    background: 
+        linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0.75),
+        rgba(255, 255, 255, 0.75)
+      ),
+      url('../assets/bg2.jpg');
+    background-size: contain;
+    background-position: center;
+    background-color: rgba(0, 0, 0, 0.5);
   }
 }
 

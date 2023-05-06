@@ -1,3 +1,5 @@
+const baseUrl = 'http://127.0.0.1:5000'
+
 interface DemoResponse {
   status: string;
   content: any;
@@ -5,7 +7,7 @@ interface DemoResponse {
 
 export default async function getDemoObject(): Promise<DemoResponse> {
   try {
-    const response = await fetch('http://127.0.0.1:5000/demo');
+    const response = await fetch(`${baseUrl}/demo`);
     const data = await response.json();
     return data as DemoResponse;
   } catch (error: any) {

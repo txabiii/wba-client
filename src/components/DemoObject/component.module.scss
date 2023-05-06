@@ -1,0 +1,181 @@
+.object {
+  position: sticky;
+  top: 0;
+
+  width: calc(100% * var(--gr-big));
+  height: 100svh;
+  padding: var(--spacing-xl) 0px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+
+  .form {
+    flex: 1;
+    transition: border 600ms ease;    
+    border: 2px solid var(--color-1);
+    width: 100%;
+    border-radius: var(--spacing-xs);
+    overflow: hidden;
+    background-color: white;
+
+    display: flex;
+    flex-direction: column;
+    position: relative;
+
+    .loadingAnimation {
+      position: absolute;
+      z-index: 1;
+      height: 100%;
+      width: 100%;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+
+      opacity: 0;
+      transition: opacity 100ms linear;
+      transition-delay: 300ms;
+
+      .loadingCircle {
+        height: 1.5rem;
+        width: 1.5rem;
+        border-radius: 100px;
+        background-color: white;
+        animation: loading-wave 1s ease-in-out infinite;
+      }
+
+      .loadingCircle:nth-child(1) {
+        animation-delay: 0ms;
+      }
+      
+      .loadingCircle:nth-child(2) {
+        animation-delay: 300ms;
+      }
+      
+      .loadingCircle:nth-child(3) {
+        animation-delay: 400ms;
+      }
+
+      @keyframes loading-wave {
+        0%, 100% {
+          transform: translateY(1rem);
+        }
+        50% {
+          transform: translateY(-1rem);
+        }
+      }
+    }
+
+    .fadeIn {
+      opacity: 1;
+    }
+
+    .colorWrapper{
+      height: 7.25rem;
+      position: relative;
+
+      .color {
+        transition: all 600ms ease-in;    
+        height: 100%;
+        background-color: var(--color-3);
+      }
+
+      .loading {
+        position: absolute;
+        top: 0;
+        height: 1000px;
+        width: 100%;
+      }
+    }
+
+    .content {
+      padding: var(--spacing-lg);
+      flex: 1;
+
+      display: flex;
+      flex-direction: column;
+    }
+
+    .uniqueInput {
+      background-color: white;
+      border: none;
+      padding: 0;
+    }
+
+    input, textarea {
+      transition: border 600ms ease;    
+      width: 100%;
+      padding: 1rem;
+      border-radius: 1rem;
+      border: 2px solid var(--color-1);
+      background-color: #F0F0F0;
+      
+      font-size: 2.5rem;
+      font-family: 'Rokkitt', serif;
+      font-weight: 400;
+    }
+
+    input {
+      text-align: center;
+    }
+
+    textarea {
+      resize: none;
+      text-align: left;
+    }
+
+    input:focus, textarea:focus {
+      outline: transparent;
+    }
+
+    .propertyGroup {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+
+      .property {
+        display: flex;
+        border: 2px solid var(--color-1);
+        border-radius: var(--spacing-xs);
+        overflow: hidden;
+
+        input {
+          border: none;
+          border-radius: 0px;
+          text-align: left;
+        }
+
+        input:first-of-type {
+          width: calc(100% * var(--gr-little));
+          border-right: 2px solid var(--color-1);
+          background-color: white;
+        }
+      }
+    }
+
+    .descriptionWrapper {
+      flex: 1;
+
+      display: flex;
+      flex-direction: column;
+
+      textarea {
+        flex: 1;
+      }
+    }
+  }
+
+  button {
+    background-color: var(--color-1);
+  }
+}
+
+@media only screen and (max-width: 1000px) { // for tablet
+  .object {
+    height: 100rem !important;
+  }
+}

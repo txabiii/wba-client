@@ -1,20 +1,17 @@
 'use client';
 
 import styles from './page.module.scss'
-import LoginInput from '@root/components/LoginInput/component'
 import Button from '@root/components/Button/component'
+import DemoObject from '@root/components/DemoObject/component';
 
 import Link from 'next/link'
 
 import { useEffect, useRef, useState } from 'react';
 
-import getDemoObject from '@root/api/demoClient';
+import { enterEmail } from '@root/api/userClient'
 
-interface DemoObject {
-  name: string,
-  properties: { [key: string]: string },
-  type: string,
-  description: string
+interface DemoObjectRef {
+  generateObjectFromParent: () => void;
 }
 
 export default function Home() {
@@ -64,20 +61,32 @@ export default function Home() {
     }
   }
 
-  // get demo object
-  const [demoObject, setDemoObject] = useState<DemoObject>()
+  // For calling generateObject function in the child component
 
-  const handleGenerateObject = () => {
-    async function fetchData() {
-      const data = await getDemoObject();
-      if(data.status === 'success') {
-        setDemoObject(data.content)
-        console.log(data.content)
-      } else {
-        console.log(data.content)
-      }
+  const childRef = useRef<DemoObjectRef>(null);
+  
+  const handleClick = () => {
+    if(childRef.current) {
+      childRef.current.generateObjectFromParent();
     }
-    fetchData();
+  };
+
+  // Handling login in/sign up states
+  const [loginInitialState, setLoginInitialState] = useState(true) // state of how the login looks initially
+  const [isRegistered, setIsRegistered] = useState(false) // state of how the login looks when the user is registered
+  const [isVerifying, setIsVerifying] = useState(false) // state of how the login looks when we're waiting for verification
+  const [finalStep, isFinalStep] = useState(false) // state of how the login looks when it's the finsl step of creating an account
+
+  const [email, setEmail] = useState<string>('');
+
+  const handleProceedClick = async () => {
+    if(!email) return
+    const result = await enterEmail(email)
+    console.log(result)
+  }
+
+  const handleLoginClick = () => {
+    //
   }
 
   return(
@@ -101,10 +110,30 @@ export default function Home() {
           </div>
           <div className={styles.bottom}>
             <div className={styles.login}> 
-              <LoginInput />
-              <LoginInput google={true} />
-              <p>By creating an account in our website you agree the <Link href='/'>Terms and Conditions</Link> and have read our <Link href='/'>Privacy Policy</Link>.</p>
-              <h4 className={styles.question}><i><u>Why should I even join?</u></i></h4>
+              {
+                loginInitialState && 
+                <>
+                  <input type="email" value={email} onChange={(e)=>setEmail(e.target.value)} placeholder='Plase enter your email...'/>
+                  <Button content='Proceed' click={handleProceedClick} />
+                  <p className={styles.forget}><Link href='/'>Forgot your passoword?</Link></p>
+                </>
+              }
+              {
+                isRegistered &&
+                <>
+                  <input type="password" value={email} onChange={(e)=>setEmail(e.target.value)} placeholder='Plase enter your password'/>
+                  <Button content='Login' click={handleProceedClick} />
+                  <p>By continuing to use our website you agree to our <Link href='/'><u>Terms and Conditions</u></Link> and have read our <Link href='/'><u>Privacy Policy</u></Link></p>
+                </>
+              }
+              <h4 
+                className={styles.question}
+                onClick={()=>{
+                  if(templateFreeRef.current) {
+                    templateFreeRef.current.scrollIntoView({ behavior: 'smooth'})
+                  }
+                }}
+              ><i><u>Why should I even join?</u></i></h4>
             </div>
           </div>
         </section>
@@ -126,9 +155,16 @@ export default function Home() {
           <div className={styles.bottom}>
             <div className={styles.content}>
               <h4>Go write your stuff! →</h4>
-              <Button content='... or Generate an object' />
+              <Button content='... or Generate an object' click={handleClick} />
               <div className={styles.empty}></div>
-              <h4 className={styles.question} ><i><u>Well, but what if I need templates?</u></i></h4>
+              <h4 
+                className={styles.question}
+                onClick={()=>{
+                  if(aiAssistanceRef.current) {
+                    aiAssistanceRef.current.scrollIntoView({ behavior: 'smooth'})
+                  }
+                }}
+              ><i><u>Well, but what if I need templates?</u></i></h4>
             </div>
           </div>
         </section>
@@ -149,10 +185,17 @@ export default function Home() {
           </div>
           <div className={styles.bottom}>
             <div className={styles.content}>
-              <Button content='... or Generate an object' />
-              <p>The AI has generated an object with the type &apos;dragon&apos; with the properties &apos;color&apos; and &apos;species&apos;</p>
+              <Button content='Generate an object' click={handleClick}/>
+              <p>Click the button above to generate a new world-building object. It will have a name, type, two properties and a brief description</p>
               <div className={styles.empty}></div>
-              <h4 className={styles.question} ><i><u>But, I don&apos;t like these AI thingies</u></i></h4>
+              <h4 
+                className={styles.question}
+                onClick={()=>{
+                  if(aiControlRef.current) {
+                    aiControlRef.current.scrollIntoView({ behavior: 'smooth'})
+                  }
+                }}
+              ><i><u>But, I don&apos;t like these AI thingies</u></i></h4>
             </div>
           </div>
         </section>
@@ -182,40 +225,7 @@ export default function Home() {
         </section>
       </main>
       <aside>
-        <div className={styles.object}>
-          <h2>See for yourself</h2>
-          <div className={styles.form}>
-            <div className={styles.color}></div>
-            <div className={styles.content}>
-              <div className={styles.details}>
-                <h5>Object details</h5>
-                <input type="text" value={demoObject?.name} placeholder='Write the name of your object' />
-                <input className={styles.uniqueInput} value={'a type of ' + demoObject?.type} type="text" placeholder='My object is a...' />
-              </div>
-              <h5>Properties</h5>
-              <div className={styles.propertyGroup}>
-                {
-                  demoObject?.properties && Object.entries(demoObject?.properties).map(([key, value], index)=>(
-                    <div key={index} className={styles.property}>
-                      <input type="text" name="property-name" value={key}  placeholder='Property 1'/>
-                      <input type="text" name="property-value" value={value} placeholder='Describe the property'/>
-                    </div>
-                  ))
-                }
-              </div>
-              <div>
-                <h5>Description</h5>
-                <textarea 
-                  value={demoObject?.description}
-                  name="description" 
-                  cols={30} rows={3} 
-                  placeholder='Write the description for your world-building-object...'>
-                </textarea>
-              </div>
-            </div>
-          </div>
-          <Button content='Generate an object' click={handleGenerateObject} />
-        </div>
+      <DemoObject ref={childRef}/>
       </aside>
     </div>
   )
