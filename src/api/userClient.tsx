@@ -12,6 +12,7 @@ export async function enterEmail(email:string) {
       })
     })
     const result = await response.json()
+    console.log(result)
     return result
   } catch(e) {
     console.error(e)

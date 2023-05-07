@@ -82,7 +82,6 @@ export default function Home() {
   const handleProceedClick = async () => {
     if(!email) return
     const result = await enterEmail(email)
-    console.log(result)
   }
 
   const handleLoginClick = () => {
@@ -180,7 +179,7 @@ export default function Home() {
             <div className={styles.content}>
               <h1>AI at your service!</h1>
               <h3><i>Ask the AI to help you write</i></h3>
-              <p>Without a template you may not exactly know where to start. But fret not! AI is here to assist. You can ask the Ai to generate an object type and its properties by pressing the button below. Then just fill-in the deets.</p>
+              <p>Without a template you may not exactly know where to start. But fret not! AI is here to assist. You can ask the Ai to generate an object type and its properties by pressing the button below. Then just modify it or fill-in the details.</p>
             </div>
           </div>
           <div className={styles.bottom}>

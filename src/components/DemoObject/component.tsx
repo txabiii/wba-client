@@ -166,7 +166,10 @@ const DemoObject = forwardRef((props, ref) => {
           </div>
         </div>
       </div>
-      <Button content='Generate an object' click={handleGenerateObject} />
+      <div className={styles.buttonWrapper}>
+        <Button content='Generate an object' click={handleGenerateObject} />
+        <div className={styles.aiOptions}></div>
+      </div>
     </div>
   )
 })
