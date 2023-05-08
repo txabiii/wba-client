@@ -52,6 +52,11 @@
         flex-direction: column;
         justify-content: flex-end;
 
+        h4 {
+          text-align: center;
+          font-weight: 400;
+        }
+
         .login {
           display: flex;
           flex-direction: column;
@@ -139,11 +144,6 @@
           height: calc(100% * var(--gr-big));
           display: flex;
           flex-direction: column;
-
-          h4 {
-            text-align: center;
-            font-weight: 400;
-          }
   
           p {
             text-align: center;
@@ -220,6 +220,119 @@
     background-position: center;
     background-color: rgba(0, 0, 0, 0.5);
   }
+}
+
+.moreFeatures {
+  padding: var(--spacing-xl);
+  height: 65rem;
+
+  background-color: black;
+  color: white;
+
+  text-align: center;
+
+  display: flex;
+  flex-direction: column;
+
+  h2 {
+    margin-bottom: 2.8rem;
+  }
+
+  .featuresWrapper {
+    flex: 1;
+
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-gap: 2rem;
+
+    .feature {
+      border: 2px solid rgba(255,255,255,0.5);
+      border-radius:2rem;
+      padding: var(--spacing-md);
+
+      display: flex;
+      flex-direction: column;
+
+      .imgWrapper {
+        flex: 1;
+        margin-top: 2.4rem;
+        border-radius: 2rem;
+        background-color: rgba(255, 255, 255, 0.75);
+      }
+    }
+  }
+}
+
+.last {
+  padding: var(--spacing-xl);
+  height: 58rem;
+  background-color: white;
+  text-align: center;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: 
+  linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.85),
+    rgba(255, 255, 255, 0.85)
+  ),
+  url('../assets/bg2.jpg');
+  background-size: cover;
+  background-position: center;
+  background-color: rgba(0, 0, 0, 0.5);
+
+  .content {
+    width: 85rem;
+
+    .login {
+      display: flex;
+      flex-direction: column;
+      margin-top: 2rem;
+      padding: 0px 19rem;
+
+      input {
+        width: 100%;
+        padding: 1.5rem;
+        border-radius: 1rem;
+        
+        font-size: 3rem;
+        font-family: 'Rokkitt', serif;
+        font-weight: 400;
+        text-align: left;
+        color: var(--color-1);
+        background-color: white;
+        border: 2px solid var(--color-1);
+      }
+
+      input:first-of-type {
+        margin-bottom: 1.5rem;
+      }
+    }
+
+    button {
+      background-color: var(--color-3);
+    }
+  }
+
+  h5 {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+    background-color: white;
+    box-shadow: 0 0 50px 100px rgba(255, 255, 255, 0.5);
+  }
+
+  span {
+    color: var(--color-3);
+    font-weight: 600;
+  }
+}
+
+.sampleFooter {
+  height: 12.4rem;
+  background-color: black;
 }
 
 @media only screen and (max-width: 1000px) { // for tablet
