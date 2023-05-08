@@ -1,6 +1,8 @@
 'use client';
 
 import styles from './page.module.scss'
+import cx from 'classnames'
+
 import Button from '@root/components/Button/component'
 import DemoObject from '@root/components/DemoObject/component';
 
@@ -8,7 +10,7 @@ import Link from 'next/link'
 
 import { useEffect, useRef, useState } from 'react';
 
-import { enterEmail } from '@root/api/userClient'
+import { enterEmail, login, signUp } from '@root/api/userClient'
 
 interface DemoObjectRef {
   generateObjectFromParent: () => void;
@@ -72,20 +74,47 @@ export default function Home() {
   };
 
   // Handling login in/sign up states
-  const [loginInitialState, setLoginInitialState] = useState(true) // state of how the login looks initially
-  const [isRegistered, setIsRegistered] = useState(false) // state of how the login looks when the user is registered
-  const [isVerifying, setIsVerifying] = useState(false) // state of how the login looks when we're waiting for verification
-  const [finalStep, isFinalStep] = useState(false) // state of how the login looks when it's the finsl step of creating an account
+  const [loginInitialState, setLoginInitialState] = useState(true)
+  const [isRegistered, setIsRegistered] = useState<Boolean | null>(null)
 
-  const [email, setEmail] = useState<string>('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('')
+  const [newUserPassword, setNewUserPassword] = useState('')
+
+  const loginMessageRef = useRef<HTMLParagraphElement>(null)
 
   const handleProceedClick = async () => {
     if(!email) return
+
     const result = await enterEmail(email)
+
+    if(result.status === '400') {
+      setIsRegistered(true);
+    } else {
+      setIsRegistered(false)
+    }
+    setLoginInitialState(false);
   }
 
-  const handleLoginClick = () => {
-    //
+  const handleLoginClick = async () => {
+    if(!email && !password) return
+
+    const result = await login(email, password)
+    console.log(result)
+
+    if(result.status === '200') {
+      console.log('logged in')
+    } else {
+      if(loginMessageRef.current) {
+        loginMessageRef.current.innerHTML = 'Password did not match. Please try again.'
+      }
+    }
+  }
+
+  const handleConfirmPassword = async () => {
+    if(!email && !newUserPassword) return
+
+    const result = await  signUp(email, newUserPassword)
   }
 
   return(
@@ -112,17 +141,46 @@ export default function Home() {
               {
                 loginInitialState && 
                 <>
+                  <p className={styles.loginMessage}>Login or Sign up. Please enter your email</p>
                   <input type="email" value={email} onChange={(e)=>setEmail(e.target.value)} placeholder='Plase enter your email...'/>
                   <Button content='Proceed' click={handleProceedClick} />
                   <p className={styles.forget}><Link href='/'>Forgot your passoword?</Link></p>
                 </>
               }
               {
-                isRegistered &&
+                isRegistered && !loginInitialState && 
                 <>
-                  <input type="password" value={email} onChange={(e)=>setEmail(e.target.value)} placeholder='Plase enter your password'/>
-                  <Button content='Login' click={handleProceedClick} />
-                  <p>By continuing to use our website you agree to our <Link href='/'><u>Terms and Conditions</u></Link> and have read our <Link href='/'><u>Privacy Policy</u></Link></p>
+                  <p ref={loginMessageRef} className={styles.loginMessage}>Account found! Please enter your password</p>
+                  <input type="password" value={password} onChange={(e)=>setPassword(e.target.value)} placeholder='Plase enter your password'/>
+                  <Button content='Login' click={handleLoginClick} />
+                  <p 
+                    className={styles.forget}
+                    onClick={()=>{
+                      setEmail('')
+                      setPassword('')
+                      setNewUserPassword('')
+                      setLoginInitialState(true)
+                      setIsRegistered(false)
+                    }}
+                  >Go back</p>
+                </>
+              }
+              {
+                !isRegistered && !loginInitialState && 
+                <>
+                  <p className={styles.loginMessage}>No account found. Setup password for a new one.</p>
+                  <input type="password" value={newUserPassword} onChange={(e)=>setNewUserPassword(e.target.value)} placeholder='Setup your password'/>
+                  <Button content='Confirm password and Login' click={handleConfirmPassword} />
+                  <p 
+                    className={styles.forget}
+                    onClick={()=>{
+                      setEmail('')
+                      setPassword('')
+                      setNewUserPassword('')
+                      setLoginInitialState(true)
+                      setIsRegistered(false)
+                    }}
+                  >Go back</p>
                 </>
               }
               <h4 

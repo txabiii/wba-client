@@ -169,40 +169,18 @@
     }
   }
 
-  .buttonWrapper {
-    width: 100%;
-    position: relative;
-    // overflow: hidden;
-
-    button {
-      background-color: var(--color-1);
-    }
-
-    .aiOptions {
-      position: absolute;
-      height: 100%;
-      width: auto;
-      aspect-ratio: 1 / 1;
-      right: 0;
-      top: 0;
-      background-color: rgba(255,255,255,0.2);
-      transform: scale(0.7);
-      border-radius: 100px;
-      color: white;
-      visibility: hidden;
-      transition: all 150ms ease;
-      opacity: 0;
-    }
-
-    button:hover ~ .aiOptions, .aiOptions:hover {
-      visibility: visible;
-      opacity: 1;
-    }
+  button {
+    background-color: var(--color-1);
   }
 }
 
 @media only screen and (max-width: 1000px) { // for tablet
   .object {
     height: 100rem !important;
+    
+    .form {
+      flex-grow: unset;
+      flex-basis: 70%;
+    }
   }
 }

@@ -59,7 +59,7 @@ const DemoObject = forwardRef((props, ref) => {
           <div className={styles.loadingCircle}></div>
           <div className={styles.loadingCircle}></div>
           <div className={styles.loadingCircle}></div>
-        </div>}
+        </div> }
         <div className={styles.colorWrapper}>
           <div className={cx(styles.color, { [styles.loading] : loading })} style={{backgroundColor: demoObject?.color}}></div>
         </div>
@@ -166,10 +166,7 @@ const DemoObject = forwardRef((props, ref) => {
           </div>
         </div>
       </div>
-      <div className={styles.buttonWrapper}>
-        <Button content='Generate an object' click={handleGenerateObject} />
-        <div className={styles.aiOptions}></div>
-      </div>
+      <Button content='Generate an object' click={handleGenerateObject} />
     </div>
   )
 })
