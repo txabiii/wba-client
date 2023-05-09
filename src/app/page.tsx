@@ -1,12 +1,12 @@
 'use client';
 
 import styles from './page.module.scss'
-import cx from 'classnames'
 
 import Button from '@root/components/Button/component'
 import DemoObject from '@root/components/DemoObject/component';
 
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 
 import { useEffect, useRef, useState } from 'react';
 
@@ -17,6 +17,8 @@ interface DemoObjectRef {
 }
 
 export default function Home() {
+  const router = useRouter()
+
   // Snap effect
   const heroRef = useRef<HTMLDivElement>(null);
   const templateFreeRef = useRef<HTMLDivElement>(null);
@@ -86,31 +88,42 @@ export default function Home() {
 
   const loginMessageRef = useRef<HTMLParagraphElement>(null)
 
+  const [loading, setLoading] = useState(false)
+
   const handleProceedClick = async () => {
     if(!email) return
 
     const emailRegex = /\S+@\S+\.\S+/;
     if(!emailRegex.test(email)) return
 
+    setLoading(true)
+
     const result = await enterEmail(email)
 
-    if(result.status === '400') {
+    setLoading(false)
+
+    if(result.status === 400) {
       setIsRegistered(true);
     } else {
       setIsRegistered(false)
     }
+
     setLoginInitialState(false);
   }
 
   const handleLoginClick = async () => {
     if(!email && !password) return
 
-    const result = await login(email, password)
-    console.log(result)
+    setLoading(true)
 
-    if(result.status === '200') {
-      console.log('logged in')
+    const result = await login(email, password)
+
+    setLoading(false)
+
+    if(result.status === 200) {
+      router.push('/workspace')
     } else {
+      setPassword('')
       if(loginMessageRef.current) {
         loginMessageRef.current.innerHTML = 'Password did not match. Please try again.'
       }
@@ -120,7 +133,13 @@ export default function Home() {
   const handleConfirmPassword = async () => {
     if(!email && !newUserPassword) return
 
-    const result = await  signUp(email, newUserPassword)
+    setLoading(true)
+
+    await signUp(email, newUserPassword)
+
+    setLoading(false)
+    
+    router.push('/verification')
   }
 
   return(
@@ -150,16 +169,16 @@ export default function Home() {
                   <>
                     <p className={styles.loginMessage}>Login or Sign up. Please enter your email</p>
                     <input type="email" value={email} onChange={(e)=>setEmail(e.target.value)} placeholder='Plase enter your email...'/>
-                    <Button content='Proceed' click={handleProceedClick} />
+                    <Button loading={loading} content='Proceed' click={handleProceedClick} />
                     <p className={styles.forget}><Link href='/'>Forgot your password?</Link></p>
                   </>
                 }
                 {
-                  isRegistered && !loginInitialState && 
+                  isRegistered && !loginInitialState &&
                   <>
                     <p ref={loginMessageRef} className={styles.loginMessage}>Account found! Please enter your password</p>
                     <input type="password" value={password} onChange={(e)=>setPassword(e.target.value)} placeholder='Plase enter your password'/>
-                    <Button content='Login' click={handleLoginClick} />
+                    <Button loading={loading} content='Login' click={handleLoginClick} />
                     <p 
                       className={styles.forget}
                       onClick={()=>{
@@ -173,11 +192,11 @@ export default function Home() {
                   </>
                 }
                 {
-                  !isRegistered && !loginInitialState && 
+                  !isRegistered && !loginInitialState &&
                   <>
                     <p className={styles.loginMessage}>No account found. Setup password for a new one.</p>
                     <input type="password" value={newUserPassword} onChange={(e)=>setNewUserPassword(e.target.value)} placeholder='Setup your password'/>
-                    <Button content='Confirm password and Login' click={handleConfirmPassword} />
+                    <Button loading={loading} content='Confirm password and Login' click={handleConfirmPassword} />
                     <p 
                       className={styles.forget}
                       onClick={()=>{
@@ -280,7 +299,7 @@ export default function Home() {
             </div>
             <div className={styles.bottom}>
               <div className={styles.content}>
-                <Button content='Disable Ai-assistance' />
+                <Button content='Disable Ai-assistance' click={()=>{}}/>
                 <p>The AI assistance has been disabled. You can turn it back on by pressing the button above.</p>
                 <div className={styles.empty}></div>
                 <h4 className={styles.question} ><i><u>I want to see more features</u></i></h4>
