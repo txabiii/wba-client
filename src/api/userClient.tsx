@@ -31,6 +31,10 @@ export async function login(email:string, password:string) {
       })
     })
     const result = await response.json()
+    if (result.wba_access_token) {
+      console.log('setting the token')
+      localStorage.setItem('wba_access_token', result.wba_access_token)
+    }
     return result
   } catch(e) {
     console.error(e)
@@ -50,8 +54,37 @@ export async function signUp(email:string, password:string) {
       })
     })
     const result = await response.json()
+    if (result.wba_access_token) {
+      localStorage.setItem('wba_access_token', result.wba_access_token)
+    }
     return result
   } catch(e) {
     console.error(e)
   }
+}
+
+export async function checkVerification() {
+  try {
+    const token = localStorage.getItem('wba_access_token');
+    const response = await fetch(`${baseUrl}/verify/check`, {
+      method: 'POST',
+      headers: {
+        'Content-type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+    })
+    const result = await response.json()
+    return result
+  } catch(e) {
+    console.error(e)
+  }
+} 
+
+export function isAuthenticated(): boolean {
+  const token = localStorage.getItem('wba_access_token')
+  return !!token
+}
+
+export function logOut() {
+  localStorage.removeItem('wba_access_token')
 }

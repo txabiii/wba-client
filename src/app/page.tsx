@@ -3,21 +3,31 @@
 import styles from './page.module.scss'
 
 import Button from '@root/components/Button/component'
-import DemoObject from '@root/components/DemoObject/component';
+import DemoObject from '@root/components/DemoObject/component'
+import Footer from '@root/components/Footer/component';
 
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 
 import { useEffect, useRef, useState } from 'react';
 
-import { enterEmail, login, signUp } from '@root/api/userClient'
+import { enterEmail, login, signUp, isAuthenticated } from '@root/api/userClient'
+
+import Cookies from 'js-cookie';
 
 interface DemoObjectRef {
   generateObjectFromParent: () => void;
 }
 
 export default function Home() {
+  // check first if user is logged in already
   const router = useRouter()
+
+  useEffect(()=>{
+    if(isAuthenticated()){
+      router.push('/workspace')
+    }
+  }, [])
 
   // Snap effect
   const heroRef = useRef<HTMLDivElement>(null);
@@ -139,7 +149,7 @@ export default function Home() {
 
     setLoading(false)
     
-    router.push('/verification')
+    router.push('/workspace')
   }
 
   return(
@@ -176,7 +186,7 @@ export default function Home() {
                 {
                   isRegistered && !loginInitialState &&
                   <>
-                    <p ref={loginMessageRef} className={styles.loginMessage}>Account found! Please enter your password</p>
+                    <p ref={loginMessageRef} className={styles.loginMessage}>Please enter your password</p>
                     <input type="password" value={password} onChange={(e)=>setPassword(e.target.value)} placeholder='Plase enter your password'/>
                     <Button loading={loading} content='Login' click={handleLoginClick} />
                     <p 
@@ -194,7 +204,7 @@ export default function Home() {
                 {
                   !isRegistered && !loginInitialState &&
                   <>
-                    <p className={styles.loginMessage}>No account found. Setup password for a new one.</p>
+                    <p className={styles.loginMessage}>Create an account for { email }.</p>
                     <input type="password" value={newUserPassword} onChange={(e)=>setNewUserPassword(e.target.value)} placeholder='Setup your password'/>
                     <Button loading={loading} content='Confirm password and Login' click={handleConfirmPassword} />
                     <p 
@@ -381,7 +391,7 @@ export default function Home() {
           </div>
         </div>
       </div>
-      <div className={styles.sampleFooter}></div>
+      <Footer />
     </div>
   )
 }
