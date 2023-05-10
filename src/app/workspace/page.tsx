@@ -16,7 +16,9 @@ export default function Workspace() {
   useEffect(()=>{
     async function verify() {
       const result = await checkVerification()
-      console.log(result)
+      if(result.status !== 200) {
+        router.push('/verification')
+      }
     }
     verify()
   })

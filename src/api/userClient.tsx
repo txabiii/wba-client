@@ -78,7 +78,44 @@ export async function checkVerification() {
   } catch(e) {
     console.error(e)
   }
-} 
+}
+
+export async function sendEmail() {
+  try {
+    const token = localStorage.getItem('wba_access_token');
+    const response = await fetch(`${baseUrl}/verify/send`, {
+      method: 'POST',
+      headers: {
+        'Content-type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+    })
+    const result = await response.json()
+    return result
+  } catch(e) {
+    console.error(e)
+  }
+}
+
+export async function verifyCode(code: number) {
+  try {
+    const token = localStorage.getItem('wba_access_token');
+    const response = await fetch(`${baseUrl}/verify/token`, {
+      method: 'POST',
+      headers: {
+        'Content-type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }, 
+      body: JSON.stringify({
+        input_token: code.toString()
+      })
+    })
+    const result = await response.json()
+    return result
+  } catch(e) {
+    console.error(e)
+  }
+}
 
 export function isAuthenticated(): boolean {
   const token = localStorage.getItem('wba_access_token')

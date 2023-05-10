@@ -11,9 +11,7 @@ import { useRouter } from 'next/navigation'
 
 import { useEffect, useRef, useState } from 'react';
 
-import { enterEmail, login, signUp, isAuthenticated } from '@root/api/userClient'
-
-import Cookies from 'js-cookie';
+import { enterEmail, login, signUp, isAuthenticated, checkVerification } from '@root/api/userClient'
 
 interface DemoObjectRef {
   generateObjectFromParent: () => void;
@@ -131,7 +129,10 @@ export default function Home() {
     setLoading(false)
 
     if(result.status === 200) {
-      router.push('/workspace')
+      const result = await checkVerification()
+      if(result.status !== 200) {
+        router.push('/verification')
+      } else router.push('/workspace')
     } else {
       setPassword('')
       if(loginMessageRef.current) {
@@ -149,7 +150,7 @@ export default function Home() {
 
     setLoading(false)
     
-    router.push('/workspace')
+    router.push('/verification')
   }
 
   return(

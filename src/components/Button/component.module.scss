@@ -13,6 +13,8 @@
   color: white;  
   background-color: var(--color-3);
 
+  transition: background-color 300ms ease;
+
   cursor: pointer;
 } 
 
