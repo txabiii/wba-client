@@ -1,5 +1,7 @@
 'use client';
 
+import styles from './page.module.scss'
+
 import { useRouter } from "next/navigation"
 import { useEffect } from "react";
 
@@ -18,15 +20,20 @@ export default function Workspace() {
       const result = await checkVerification()
       if(result.status !== 200) {
         router.push('/verification')
+      } else {
+        
       }
     }
     verify()
   })
 
   return(
-    <div>
-      <h1>Welcome to workspace</h1>
-      <button onClick={logOut}>Log out</button>
+    <div className={styles.workspace}>
+      <div className={styles.files}></div>
+      <main>
+        <h1>Welcome to workspace</h1>
+        <button onClick={logOut}>Log out</button>
+      </main>
     </div>
   )
 }

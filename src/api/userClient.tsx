@@ -32,8 +32,8 @@ export async function login(email:string, password:string) {
     })
     const result = await response.json()
     if (result.wba_access_token) {
-      console.log('setting the token')
       localStorage.setItem('wba_access_token', result.wba_access_token)
+      if(result.email) localStorage.setItem('email', result.email)
     }
     return result
   } catch(e) {
@@ -56,6 +56,7 @@ export async function signUp(email:string, password:string) {
     const result = await response.json()
     if (result.wba_access_token) {
       localStorage.setItem('wba_access_token', result.wba_access_token)
+      if(result.email) localStorage.setItem('email', result.email)
     }
     return result
   } catch(e) {

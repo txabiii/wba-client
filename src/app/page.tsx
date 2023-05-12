@@ -148,7 +148,7 @@ export default function Home() {
 
     await signUp(email, newUserPassword)
 
-    setLoading(false)
+    // setLoading(false)
     
     router.push('/verification')
   }

@@ -7,7 +7,7 @@ import Button from '@root/components/Button/component'
 
 import { sendEmail, verifyCode } from '@root/api/userClient'
 
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 
 export default function VerificiationPage() {
@@ -17,13 +17,16 @@ export default function VerificiationPage() {
   const [loading, setLoading] = useState(false)
   const [code, setCode] = useState<number | undefined>()
 
+  const messageRef = useRef<HTMLParagraphElement>(null)
+
   const handleSendEmail = async () => {
     setLoading(true)
     const response = await sendEmail()
     if(response.status == 200) {
+      if(messageRef.current) messageRef.current.innerHTML = 'Email has been sent. Please check your inbox'
       setInitial(false)
     } else {
-      //do something 'email failed to send please try again'
+      if(messageRef.current) messageRef.current.innerHTML = 'An error occured. Please try again.'
     }
     setLoading(false)
   }
@@ -34,7 +37,9 @@ export default function VerificiationPage() {
 
     const response = await verifyCode(code)
     if(response.status === 200) router.push('/workspace')
-    else //do something 'code is incorrect'
+    else {
+      if(messageRef.current) messageRef.current.innerHTML = 'Input token is incorrect. Please try again.'
+    }
     setLoading(false)
   }
 
@@ -43,7 +48,8 @@ export default function VerificiationPage() {
       <main>
         <div className={cx(styles.container, { [styles.blueButton] : !initial})}>
           <h3>Verify your email address</h3>
-          <p>To continue you using the website you must have a verified email address.</p>
+          <p>To continue using the website you must have a verified email address.</p>
+          <p ref={messageRef} className={styles.message}></p>
           <input 
             type="number" 
             placeholder='6-digit code'

@@ -26,6 +26,10 @@
 
       text-align: center;
 
+      .message {
+        color: var(--color-3);
+      }
+
       input {
         font-family: "Montserrat", sans-serif;
         margin-top: var(--spacing-sm);
