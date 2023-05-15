@@ -105,3 +105,12 @@ a {
   color: inherit;
   text-decoration: none;
 }
+
+.DraftEditor-root {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 2rem;
+  
+  white-space: pre-wrap;
+  word-break: break-word;
+  max-width: 80rem;
+}
