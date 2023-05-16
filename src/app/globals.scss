@@ -12,6 +12,7 @@
   --color-3: #307ACE;
   --color-4: #A1C5F6;
   --color-5: #FFFCF7; 
+  --color-6: #f7eddc; 
 
   // spacings
   --spacing-xxs: 0.5rem;
@@ -106,11 +107,20 @@ a {
   text-decoration: none;
 }
 
-.DraftEditor-root {
+div.DraftEditor-root {
   font-family: 'Montserrat', sans-serif;
   font-size: 2rem;
   
   white-space: pre-wrap;
   word-break: break-word;
-  max-width: 80rem;
+
+  max-width: 85rem;
+  width: 100%;
+ 
+  flex: 1;
+  overflow-y: auto;
+}
+div.DraftEditor-editorContainer,
+div.public-DraftEditor-content {
+  height: 100%;
 }
