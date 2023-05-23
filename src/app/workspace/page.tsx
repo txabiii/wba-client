@@ -42,6 +42,15 @@ export default function Workspace() {
   // object state
   const [object, setObject] = useState<Object>()
 
+  //sample property
+  const properties: Property[] = [
+    {
+      id: 1,
+      name: 'blah',
+      value: 'blub'
+    }
+  ];
+
   const router = useRouter()
 
   const logOut = () => {
@@ -52,8 +61,10 @@ export default function Workspace() {
   useEffect(()=>{
     async function verify() { 
       const result = await checkVerification()
-      if(result.status !== 200) {
-        router.push('/verification')
+      if(result){
+        if(result.status !== 200) {
+          router.push('/verification')
+        }
       }
     }
     verify()
@@ -96,8 +107,15 @@ export default function Workspace() {
                 blockStyleFn={myBlockStyleFn}
               />
             </div>
-            <aside className={styles.properties}>
-
+            <aside className={styles.propertiesSidebar}>
+              <div className={styles.color}></div>
+              <div className={styles.properties}>
+                <h5>Properties</h5>
+                <div className={styles.property}>
+                  <input type="text" />
+                  <textarea name="" id="" cols={30} rows={1}></textarea>
+                </div>
+              </div>
             </aside>
           </section>
         </main>

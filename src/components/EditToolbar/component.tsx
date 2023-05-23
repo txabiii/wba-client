@@ -63,7 +63,7 @@ const BLOCK_TYPES = [
   { label: "H3", style: "header-three" },
   { label: "H4", style: "header-four" },
   { label: "Section", style: "header-five" },
-  { label: "Blockquote", style: "blockquote" }
+  { label: "Quotes", style: "blockquote" }
 ];
 const BlockStyleControls = (props: any) => {
   const { editorState } = props;

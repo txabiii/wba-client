@@ -8,6 +8,11 @@
     flex-direction: column;
 
     nav {
+      background-color: white;
+      position: sticky;
+      top: 0;
+      z-index: 2;
+
       .options {
         display: flex;
         gap: 4rem;
@@ -113,6 +118,10 @@
           right: var(--spacing-sm);
         }
 
+        h1, h2, h3, h4 {
+          font-weight: 600;
+        }
+
         h5 {
           color: var(--color-2);
           border-bottom: 1px solid var(--color-2);
@@ -149,9 +158,54 @@
         }
       }
 
-      .properties {
+      .propertiesSidebar {
         width: 52rem;
-        background-color: var(--color-3);
+        background-color: white;
+        border: 1px solid var(--color-1);
+
+        .color {
+          min-height: 6rem;
+          background-color: var(--color-3);
+        }
+
+        .properties {
+          padding: var(--spacing-sm);
+
+          h5 {
+            color: var(--color-2);
+          }
+
+          .property {
+            display: flex;
+            border: 1px solid var(--color-1);
+            overflow: hidden;
+            border-radius: var(--spacing-xxs);
+          }
+
+          input, textarea {
+            padding: var(--spacing-xs);
+            border: none;
+            font-size: 2rem;
+          }
+          
+          input {
+            width: calc(100% * var(--gr-little));
+            border-right: 1px solid var(--color-1);
+            font-family: 'Rokkitt', serif;
+            font-weight: 600;
+          }
+
+          textarea {
+            flex: 1;
+            resize: none;
+            background-color: #FAFAFA;
+            font-family: 'Montserrat', sans-serif;
+          }
+
+          input:focus, textarea:focus {
+            outline: none;
+          }
+        }
       }
     }
   }
