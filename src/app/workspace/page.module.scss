@@ -170,42 +170,48 @@
 
         .properties {
           padding: var(--spacing-sm);
-
+        
           h5 {
             color: var(--color-2);
           }
-
+        
           .property {
             display: flex;
+            flex-direction: row;
             border: 1px solid var(--color-1);
             overflow: hidden;
             border-radius: var(--spacing-xxs);
           }
-
-          input, textarea {
+        
+          input,
+          .propertyValue {
             padding: var(--spacing-xs);
             border: none;
             font-size: 2rem;
           }
-          
+        
           input {
             width: calc(100% * var(--gr-little));
             border-right: 1px solid var(--color-1);
             font-family: 'Rokkitt', serif;
             font-weight: 600;
           }
-
-          textarea {
+        
+          .propertyValue {
             flex: 1;
-            resize: none;
+            resize: vertical;
             background-color: #FAFAFA;
             font-family: 'Montserrat', sans-serif;
+            max-height: calc(6rem + var(--spacing-xs)*3);
+            overflow-y: auto;
           }
-
-          input:focus, textarea:focus {
+        
+          input:focus,
+          .propertyValue:focus {
             outline: none;
           }
         }
+        
       }
     }
   }

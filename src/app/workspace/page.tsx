@@ -8,7 +8,7 @@ import Button from '@root/components/Button/component';
 import EditToolbar from '@root/components/EditToolbar/component';
 
 import { useRouter } from "next/navigation"
-import { useEffect, useState } from "react";
+import { useEffect, useState, ChangeEvent } from "react";
 
 import { ContentBlock, Editor, EditorState } from 'draft-js';
 
@@ -43,13 +43,30 @@ export default function Workspace() {
   const [object, setObject] = useState<Object>()
 
   //sample property
-  const properties: Property[] = [
-    {
-      id: 1,
-      name: 'blah',
-      value: 'blub'
-    }
-  ];
+  // const properties: Property[] = [
+  //   {
+  //     id: 1,
+  //     name: 'blah',
+  //     value: 'blub'
+  //   }
+  // ];
+
+  const [properties, setProperties] = useState<Property[]>(
+    [
+      {
+        id: 1,
+        name: 'blah',
+        value: 'blub'
+      }
+    ]
+  );
+
+  const [content, setContent] = useState('');
+
+  const handleInput = (event: ChangeEvent<HTMLDivElement>) => {
+    const { textContent } = event.target;
+    setContent(textContent || '');
+  };
 
   const router = useRouter()
 
@@ -113,7 +130,12 @@ export default function Workspace() {
                 <h5>Properties</h5>
                 <div className={styles.property}>
                   <input type="text" />
-                  <textarea name="" id="" cols={30} rows={1}></textarea>
+                  <div
+                    contentEditable="true"
+                    className={styles.propertyValue}
+                    onInput={handleInput}
+                  >
+                  </div>
                 </div>
               </div>
             </aside>
