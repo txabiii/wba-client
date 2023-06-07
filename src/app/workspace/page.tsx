@@ -43,14 +43,6 @@ export default function Workspace() {
   const [object, setObject] = useState<Object>()
 
   //sample property
-  // const properties: Property[] = [
-  //   {
-  //     id: 1,
-  //     name: 'blah',
-  //     value: 'blub'
-  //   }
-  // ];
-
   const [properties, setProperties] = useState<Property[]>(
     [
       {

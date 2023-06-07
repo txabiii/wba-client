@@ -204,6 +204,7 @@
             font-family: 'Montserrat', sans-serif;
             max-height: calc(6rem + var(--spacing-xs)*3);
             overflow-y: auto;
+            resize: none;
           }
         
           input:focus,
