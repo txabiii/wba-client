@@ -53,7 +53,7 @@ const DemoObject = forwardRef((props, ref) => {
 
   return(
     <div className={styles.object}>
-      <h2>See for yourself</h2>
+      <h2>Generate Object</h2>
       <div className={styles.form}>
         { loading && <div className={cx(styles.loadingAnimation, { [styles.fadeIn] : loading })}>
           <div className={styles.loadingCircle}></div>

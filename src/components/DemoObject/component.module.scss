@@ -1,7 +1,4 @@
 .object {
-  position: sticky;
-  top: 0;
-
   width: calc(100% * var(--gr-big));
   height: 100svh;
   padding: var(--spacing-xl) 0px;
@@ -176,11 +173,7 @@
 
 @media only screen and (max-width: 1000px) { // for tablet
   .object {
-    height: 100rem !important;
-    
-    .form {
-      flex-grow: unset;
-      flex-basis: 70%;
-    }
+    width: calc(100% - 6rem);
+    height: 80vh !important;
   }
 }

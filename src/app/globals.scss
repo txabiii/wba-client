@@ -28,23 +28,6 @@
   --gr-big: 0.618034
 }
 
-// Dark-theme off for now
-
-/**
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-rgb: 0, 0, 0;
-  }
-}
-
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
-}
-*/
-
 * {
   box-sizing: border-box;
   padding: 0;
@@ -70,19 +53,13 @@ body {
 
 @media only screen and (max-width: 1200px) { // for tablet
   html {
-    font-size: 7px;
+    font-size: 8px;
   }
 }
 
 @media only screen and (max-width: 600px) { // for larger smarthpones
   html {
     font-size: 6px;
-  }
-}
-
-@media only screen and (max-width: 360px) { // for standard smartphones
-  html {
-    font-size: 4px;
   }
 }
 
