@@ -9,6 +9,10 @@
   justify-content: space-between;
   gap: 2rem;
 
+  h2 {
+    text-align: center;
+  }
+
   .form {
     flex: 1;
     transition: border 600ms ease;    
@@ -174,6 +178,24 @@
 @media only screen and (max-width: 1000px) { // for tablet
   .object {
     width: calc(100% - 6rem);
-    height: 80vh !important;
+    height: 90vh !important;
+
+    .form {
+      border-width: 1px;
+
+      input, textarea {
+        border-width: 1px;
+      }
+
+      .propertyGroup {  
+        .property {
+          border-width: 1px;
+  
+          input:first-of-type {
+            border-width: 1px;
+          }
+        }
+      }
+    }
   }
 }

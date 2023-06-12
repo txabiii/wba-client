@@ -19,7 +19,14 @@ const DemoObject = forwardRef((props, ref) => {
   }))
 
   // get demo object
-  const [demoObject, setDemoObject] = useState<DemoObjectInterface>()
+  const [demoObject, setDemoObject] = useState<DemoObjectInterface>({
+    name: undefined,
+    properties: [{ name: undefined, description: undefined }, { name: undefined, description: undefined }],
+    type: undefined,
+    description: undefined,
+    color: undefined,
+  });
+  
   const [loading, setLoading] = useState(false)
 
   const handleGenerateObject = () => {
@@ -51,9 +58,23 @@ const DemoObject = forwardRef((props, ref) => {
     return hexRegex.test(value);
   }
 
+  function buildDemoObjectString(demoObject: DemoObjectInterface) {
+    const name = demoObject.name !== undefined ? demoObject.name : '-';
+    const type = demoObject.type !== undefined ? demoObject.type : '-';
+    const property1Name = demoObject.properties[0]?.name !== undefined ? demoObject.properties[0]?.name : '-';
+    const property2Name = demoObject.properties[1]?.name !== undefined ? demoObject.properties[1]?.name : '-';
+    const property1Description = demoObject.properties[0]?.description !== undefined ? demoObject.properties[0]?.description : '-';
+    const property2Description = demoObject.properties[1]?.description !== undefined ? demoObject.properties[1]?.description : '-';
+    const description = demoObject.description !== undefined ? demoObject.description : '-';
+    const color = demoObject.color !== undefined ? demoObject.color : '-';
+  
+    return `{"name":"${name}","type":"${type}","properties":{"${property1Name}":"${property1Description}","${property2Name}":"${property2Description}"},"description":"${description}","color":"${color}"}`;
+  }
+  
+
   return(
     <div className={styles.object}>
-      <h2>Generate Object</h2>
+      <h2>World-building Object Generator</h2>
       <div className={styles.form}>
         { loading && <div className={cx(styles.loadingAnimation, { [styles.fadeIn] : loading })}>
           <div className={styles.loadingCircle}></div>
@@ -69,61 +90,78 @@ const DemoObject = forwardRef((props, ref) => {
             <input
               type="text" 
               value={demoObject?.name} 
-              placeholder='Write the name of your object'
-              onChange={(e)=>setDemoObject((prev) => {
-                if(!prev) return;
+              placeholder='Object name'
+              onChange={(e) => setDemoObject((prev) => {
+                if (!prev) {
+                  return {
+                    name: e.target.value,
+                    properties: [],
+                    type: '',
+                    description: '',
+                    color: ''
+                  };
+                }
                 return {
                   ...prev,
                   name: e.target.value
-                }
+                };
               })}
             />
-            <input
-              className={styles.uniqueInput} 
-              value={demoObject?.type} 
-              type="text" 
-              placeholder='My object is a...' 
-              onChange={(e)=>setDemoObject((prev) => {
-                if(!prev) return;
+          <input
+            className={styles.uniqueInput} 
+            value={demoObject.type} 
+            type="text" 
+            placeholder='Object type' 
+            onChange={(e) => setDemoObject((prev) => {
+              if (!prev) {
                 return {
-                  ...prev,
-                  type: e.target.value
-                }
-              })}
-            />
+                  name: '',
+                  properties: [],
+                  type: e.target.value,
+                  description: '',
+                  color: ''
+                };
+              }
+              return {
+                ...prev,
+                type: e.target.value
+              };
+            })}
+          />
           </div>
           <div>
             <h5>Properties</h5>
             <div className={styles.propertyGroup}>
               {
-                demoObject?.properties && demoObject.properties.map((property, index)=>(
+                demoObject?.properties && demoObject.properties.map((property, index) => (
                   <div key={index} className={styles.property}>
                     <input
-                      type="text" 
-                      name="property-name" 
-                      value={property.name} placeholder='Property 1'
+                      type="text"
+                      name="property-name"
+                      value={property.name}
+                      placeholder={`Property ${index + 1}`}
                       onChange={(e) => {
                         const newKey = e.target.value;
                         setDemoObject(prev => {
-                          if(!prev) return;
+                          if (!prev) return prev;
                           const updatedProperties = [...prev.properties];
-                          updatedProperties[index] = {...updatedProperties[index], name: newKey};
-                          return {...prev, properties: updatedProperties};
+                          updatedProperties[index] = { ...updatedProperties[index], name: newKey };
+                          return { ...prev, properties: updatedProperties };
                         });
                       }}
                     />
-                    <input 
-                      type="text" 
-                      name="property-description" 
-                      value={property.description} 
-                      placeholder='Describe the property'
+                    <input
+                      type="text"
+                      name="property-description"
+                      value={property.description}
+                      placeholder="Property description"
                       onChange={(e) => {
                         const newValue = e.target.value;
                         setDemoObject(prev => {
-                          if(!prev)return;
+                          if (!prev) return prev;
                           const updatedProperties = [...prev.properties];
-                          updatedProperties[index] = {...updatedProperties[index], description: newValue};
-                          return {...prev, properties: updatedProperties};
+                          updatedProperties[index] = { ...updatedProperties[index], description: newValue };
+                          return { ...prev, properties: updatedProperties };
                         });
                       }}
                     />
@@ -135,11 +173,11 @@ const DemoObject = forwardRef((props, ref) => {
                 <>
                   <div className={styles.property}>
                     <input type="text" name="property-name" placeholder='Property 1'/>
-                    <input type="text" name="property-description" placeholder='Describe the property'/>
+                    <input type="text" name="property-description" placeholder='Property description'/>
                   </div>
                   <div className={styles.property}>
-                    <input type="text" name="property-name" placeholder='Property 1'/>
-                    <input type="text" name="property-description" placeholder='Describe the property'/>
+                    <input type="text" name="property-name" placeholder='Property 2'/>
+                    <input type="text" name="property-description" placeholder='Property description'/>
                   </div>
                 </>
               }
@@ -150,19 +188,19 @@ const DemoObject = forwardRef((props, ref) => {
             <textarea 
               value={demoObject?.description}
               name="description" 
-              cols={30} rows={3} 
-              placeholder='Write the description for your world-building-object...'
-              onChange={(e)=>{
-                setDemoObject((prev)=>{
-                  if(!prev) return;
+              cols={30} 
+              rows={3} 
+              placeholder='Object description'
+              onChange={(e) => {
+                setDemoObject(prev => {
+                  if (!prev) return prev;
                   return {
                     ...prev,
                     description: e.target.value
-                  }
-                })
+                  };
+                });
               }}
-              >
-            </textarea>
+            ></textarea>
           </div>
         </div>
       </div>

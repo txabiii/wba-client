@@ -1,12 +1,12 @@
 export interface ObjectPropertyInterface {
-  name: string,
-  description: string,
+  name?: string,
+  description?: string,
 }
 
 export interface DemoObjectInterface {
-  name: string,
+  name?: string,
   properties: ObjectPropertyInterface[],
-  type: string,
-  description: string,
-  color: string,
+  type?: string,
+  description?: string,
+  color?: string,
 }
