@@ -34,11 +34,10 @@ const DemoObject = forwardRef((props, ref) => {
     async function fetchData() {
       const data = await getDemoObject();
       if(data.status === 'success') {
-        const propertiesArray = Object.entries(data.content.properties).map(([key, value]) => ({
+        data.content.properties = Object.entries(data.content.properties).map(([key, value]) => ({
           name: key,
           description: value
         }))
-        data.content.properties = propertiesArray
         data.content.type = data.content.type.charAt(0).toUpperCase() + data.content.type.slice(1)
 
         if(!isHexColor(data.content.color))
@@ -69,8 +68,7 @@ const DemoObject = forwardRef((props, ref) => {
     const color = demoObject.color !== undefined ? demoObject.color : '-';
   
     return `{"name":"${name}","type":"${type}","properties":{"${property1Name}":"${property1Description}","${property2Name}":"${property2Description}"},"description":"${description}","color":"${color}"}`;
-  }
-  
+  }  
 
   return(
     <div className={styles.object}>
