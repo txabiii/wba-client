@@ -9,7 +9,7 @@ import React, {forwardRef, useImperativeHandle, useRef} from 'react'
 
 import { useState } from 'react';
 
-import { DemoObjectInterface } from '@root/utils/interfaces'
+import { ObjectInterface, PropertyInterface, ObjectOrPropetyValueInterface } from '@root/utils/interfaces'
 
 const DemoObject = forwardRef((props, ref) => {
   useImperativeHandle(ref, () => ({
@@ -19,7 +19,7 @@ const DemoObject = forwardRef((props, ref) => {
   }))
 
   // get demo object
-  const [demoObject, setDemoObject] = useState<DemoObjectInterface>({
+  const [demoObject, setDemoObject] = useState<ObjectInterface>({
     name: undefined,
     properties: [{ name: undefined, description: undefined }, { name: undefined, description: undefined }],
     type: undefined,
@@ -34,16 +34,68 @@ const DemoObject = forwardRef((props, ref) => {
     async function fetchData() {
       const data = await getDemoObject();
       if(data.status === 'success') {
-        data.content.properties = Object.entries(data.content.properties).map(([key, value]) => ({
-          name: key,
-          description: value
-        }))
-        data.content.type = data.content.type.charAt(0).toUpperCase() + data.content.type.slice(1)
+        const { properties, name, type, description, color } = data.content;
 
+        const processedProperties: PropertyInterface[] = Object.entries(properties)
+          .slice(0,2)
+          .map(([key, value], index) => {
+          const processedProperty: PropertyInterface = {};
+
+          if (!demoObject.properties[index].name?.locked) {
+            processedProperty.name = {
+              value: key,
+              locked: false, // Set the locked state
+            };
+          }
+
+          if (!demoObject.properties[index].description?.locked) {
+            processedProperty.description = {
+              value: String(value),
+              locked: false, // Set the locked state
+            };
+          }
+
+          return processedProperty;
+        });
+
+        let processedName, processedType, processedDescription = {}
+
+        if(!demoObject.name?.locked) {
+          processedName = {
+            value: name,
+            locked: false, // Set the locked state
+          };
+        }
+
+        if(!demoObject.type?.locked) {
+          processedType = {
+            value: type,
+            locked: false, // Set the locked state
+          };
+        }
+
+        if(!demoObject.description?.locked) {
+          processedDescription = {
+            value: description,
+            locked: false, // Set the locked state
+          };
+        }
+
+        let processedColor = color;
         if(!isHexColor(data.content.color))
-          data.content.color = '#307ACE';
+          processedColor = '#307ACE';
 
-        setDemoObject(data.content)
+        const processedObject: ObjectInterface = {
+          properties: processedProperties,
+          name: processedName,
+          type: processedType,
+          description: processedDescription,
+          color: processedColor,
+        };
+
+        console.log(processedObject)
+
+        setDemoObject(processedObject)
       } else {
         console.log(data.content)
       }
@@ -57,17 +109,16 @@ const DemoObject = forwardRef((props, ref) => {
     return hexRegex.test(value);
   }
 
-  function buildDemoObjectString(demoObject: DemoObjectInterface) {
-    const name = demoObject.name !== undefined ? demoObject.name : '-';
-    const type = demoObject.type !== undefined ? demoObject.type : '-';
-    const property1Name = demoObject.properties[0]?.name !== undefined ? demoObject.properties[0]?.name : '-';
-    const property2Name = demoObject.properties[1]?.name !== undefined ? demoObject.properties[1]?.name : '-';
-    const property1Description = demoObject.properties[0]?.description !== undefined ? demoObject.properties[0]?.description : '-';
-    const property2Description = demoObject.properties[1]?.description !== undefined ? demoObject.properties[1]?.description : '-';
-    const description = demoObject.description !== undefined ? demoObject.description : '-';
-    const color = demoObject.color !== undefined ? demoObject.color : '-';
+  function buildDemoObjectString(demoObject: ObjectInterface) {
+    const name = demoObject.name?.value !== undefined ? demoObject.name.value : '-';
+    const type = demoObject.type?.value !== undefined ? demoObject.type.value : '-';
+    const property1Name = demoObject.properties[0]?.name?.value !== undefined ? demoObject.properties[0].name.value : '-';
+    const property2Name = demoObject.properties[1]?.name?.value !== undefined ? demoObject.properties[1].name.value : '-';
+    const property1Description = demoObject.properties[0]?.description?.value !== undefined ? demoObject.properties[0].description.value : '-';
+    const property2Description = demoObject.properties[1]?.description?.value !== undefined ? demoObject.properties[1].description.value : '-';
+    const description = demoObject.description?.value !== undefined ? demoObject.description.value : '-';
   
-    return `{"name":"${name}","type":"${type}","properties":{"${property1Name}":"${property1Description}","${property2Name}":"${property2Description}"},"description":"${description}","color":"${color}"}`;
+    return `{"name":"${name}","type":"${type}","properties":{"${property1Name}":"${property1Description}","${property2Name}":"${property2Description}"},"description":"${description}","color":"-"}`;
   }  
 
   return(
@@ -87,44 +138,32 @@ const DemoObject = forwardRef((props, ref) => {
             <h5>Object details</h5>
             <input
               type="text" 
-              value={demoObject?.name} 
+              value={demoObject.name?.value} 
               placeholder='Object name'
-              onChange={(e) => setDemoObject((prev) => {
-                if (!prev) {
+              onChange={(e) =>
+                setDemoObject((prev) => {
+                  if (!prev) return prev
                   return {
-                    name: e.target.value,
-                    properties: [],
-                    type: '',
-                    description: '',
-                    color: ''
+                    ...prev,
+                    name: { value: e.target.value, locked: prev.name?.locked || false }
                   };
-                }
-                return {
-                  ...prev,
-                  name: e.target.value
-                };
-              })}
+                })
+              }
             />
           <input
             className={styles.uniqueInput} 
-            value={demoObject.type} 
+            value={demoObject.type?.value} 
             type="text" 
             placeholder='Object type' 
-            onChange={(e) => setDemoObject((prev) => {
-              if (!prev) {
+            onChange={(e) =>
+              setDemoObject((prev) => {
+                if (!prev) return prev
                 return {
-                  name: '',
-                  properties: [],
-                  type: e.target.value,
-                  description: '',
-                  color: ''
+                  ...prev,
+                  type: { value: e.target.value, locked: prev.name?.locked || false }
                 };
-              }
-              return {
-                ...prev,
-                type: e.target.value
-              };
-            })}
+              })
+            }
           />
           </div>
           <div>
@@ -136,14 +175,14 @@ const DemoObject = forwardRef((props, ref) => {
                     <input
                       type="text"
                       name="property-name"
-                      value={property.name}
+                      value={property.name?.value}
                       placeholder={`Property ${index + 1}`}
                       onChange={(e) => {
                         const newKey = e.target.value;
                         setDemoObject(prev => {
                           if (!prev) return prev;
                           const updatedProperties = [...prev.properties];
-                          updatedProperties[index] = { ...updatedProperties[index], name: newKey };
+                          updatedProperties[index] = { ...updatedProperties[index], name: { value: newKey, locked: prev.properties[index].name?.locked || false } };
                           return { ...prev, properties: updatedProperties };
                         });
                       }}
@@ -151,14 +190,14 @@ const DemoObject = forwardRef((props, ref) => {
                     <input
                       type="text"
                       name="property-description"
-                      value={property.description}
+                      value={property.description?.value}
                       placeholder="Property description"
                       onChange={(e) => {
                         const newValue = e.target.value;
                         setDemoObject(prev => {
                           if (!prev) return prev;
                           const updatedProperties = [...prev.properties];
-                          updatedProperties[index] = { ...updatedProperties[index], description: newValue };
+                          updatedProperties[index] = { ...updatedProperties[index], name: { value: newValue, locked: prev.properties[index].name?.locked || false } };
                           return { ...prev, properties: updatedProperties };
                         });
                       }}
@@ -184,7 +223,7 @@ const DemoObject = forwardRef((props, ref) => {
           <div className={styles.descriptionWrapper}>
             <h5>Description</h5>
             <textarea 
-              value={demoObject?.description}
+              value={demoObject.description?.value}
               name="description" 
               cols={30} 
               rows={3} 
@@ -194,7 +233,7 @@ const DemoObject = forwardRef((props, ref) => {
                   if (!prev) return prev;
                   return {
                     ...prev,
-                    description: e.target.value
+                    description: { value: e.target.value, locked: prev.name?.locked || false }
                   };
                 });
               }}
